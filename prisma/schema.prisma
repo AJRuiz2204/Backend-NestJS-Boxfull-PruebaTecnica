@@ -1,14 +1,47 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model Shipment {
+  id                  Int       @id @default(autoincrement())
+  pickupAddress       String
+  scheduledDate       DateTime
+  firstName           String
+  lastName            String
+  email               String
+  phone               String
+  destinationAddress  String
+  department          String
+  municipality        String
+  referencePoints     String
+  comments            String?
+  packages            Package[] // Relación 1 a muchos con "Package"
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+model Package {
+  id         Int      @id @default(autoincrement())
+  length     Float
+  width      Float
+  height     Float
+  weight     Float
+  content    String
+  shipmentId Int
+  shipment   Shipment @relation(fields: [shipmentId], references: [id])
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

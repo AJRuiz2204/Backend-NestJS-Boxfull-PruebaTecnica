@@ -20,7 +20,7 @@ model Shipment {
   municipality        String
   referencePoints     String
   comments            String?
-  packages            Package[] // Relación 1 a muchos con "Package"
+  packages            Package[]
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 }

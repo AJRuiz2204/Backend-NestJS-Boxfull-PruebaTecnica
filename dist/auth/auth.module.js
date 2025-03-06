@@ -13,6 +13,10 @@ const auth_service_1 = require("./auth.service");
 const auth_controller_1 = require("./auth.controller");
 const users_module_1 = require("../users/users.module");
 const jwt_strategy_1 = require("./jwt.strategy");
+const jwtExpiresIn = process.env.JWT_EXPIRES_IN
+    ? Number(process.env.JWT_EXPIRES_IN)
+    : 86400;
+const expiresIn = jwtExpiresIn < 1800 ? 1800 : jwtExpiresIn;
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -22,7 +26,7 @@ exports.AuthModule = AuthModule = __decorate([
             users_module_1.UsersModule,
             jwt_1.JwtModule.register({
                 secret: process.env.JWT_SECRET || 'your_jwt_secret',
-                signOptions: { expiresIn: '1d' },
+                signOptions: { expiresIn },
             }),
         ],
         controllers: [auth_controller_1.AuthController],

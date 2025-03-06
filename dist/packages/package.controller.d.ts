@@ -7,5 +7,5 @@ export declare class PackagesController {
     create(dto: CreateShipmentDto): Promise<any>;
     update(id: string, dto: UpdateShipmentDto): Promise<any>;
     delete(id: string): Promise<any>;
-    findByMunicipalityAndDepartment(municipality?: string, department?: string): Promise<any[]>;
+    getShipments(): Promise<any[]>;
 }

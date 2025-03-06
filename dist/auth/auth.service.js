@@ -22,6 +22,10 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
     }
     async register(createUserDto) {
+        const existingUser = await this.usersService.findByEmail(createUserDto.email);
+        if (existingUser) {
+            throw new common_1.ConflictException('El correo ya existe');
+        }
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(createUserDto.password, saltRounds);
         const user = await this.usersService.create({

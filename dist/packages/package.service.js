@@ -18,7 +18,13 @@ let PackagesService = class PackagesService {
         this.prisma = prisma;
     }
     async createShipment(dto) {
+        if (!dto.scheduledDate) {
+            throw new common_1.BadRequestException("El campo 'scheduledDate' es obligatorio");
+        }
         const scheduledDate = new Date(dto.scheduledDate);
+        if (isNaN(scheduledDate.getTime())) {
+            throw new common_1.BadRequestException("Fecha 'scheduledDate' no válida");
+        }
         return this.prisma.shipment.create({
             data: {
                 pickupAddress: dto.pickupAddress,

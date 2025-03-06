@@ -1,5 +1,3 @@
-// src/packages/dto/create-package.dto.ts
-
 import { IsNumber, IsString } from 'class-validator';
 
 export class CreatePackageDto {

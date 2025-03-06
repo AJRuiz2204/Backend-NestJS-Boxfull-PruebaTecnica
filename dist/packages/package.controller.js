@@ -32,11 +32,8 @@ let PackagesController = class PackagesController {
     async delete(id) {
         return this.packagesService.deleteShipment(Number(id));
     }
-    async findByMunicipalityAndDepartment(municipality, department) {
-        if (!municipality && !department) {
-            throw new common_1.BadRequestException('Debe enviar al menos un filtro: municipality o department');
-        }
-        return this.packagesService.getShipmentsByFilters(municipality, department);
+    async getShipments() {
+        return this.packagesService.getShipmentsByFilters();
     }
 };
 exports.PackagesController = PackagesController;
@@ -99,23 +96,13 @@ __decorate([
 ], PackagesController.prototype, "delete", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Obtener envíos por municipio y departamento' }),
-    (0, swagger_1.ApiQuery)({
-        name: 'municipality',
-        required: false,
-        description: 'Municipio para filtrar envíos',
+    (0, swagger_1.ApiOperation)({
+        summary: 'Obtener envíos y packages sin filtros',
     }),
-    (0, swagger_1.ApiQuery)({
-        name: 'department',
-        required: false,
-        description: 'Departamento para filtrar envíos',
-    }),
-    __param(0, (0, common_1.Query)('municipality')),
-    __param(1, (0, common_1.Query)('department')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], PackagesController.prototype, "findByMunicipalityAndDepartment", null);
+], PackagesController.prototype, "getShipments", null);
 exports.PackagesController = PackagesController = __decorate([
     (0, swagger_1.ApiTags)('shipments'),
     (0, common_1.Controller)('shipments'),

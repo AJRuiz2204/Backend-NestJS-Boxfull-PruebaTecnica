@@ -3,8 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-// src/auth/auth.service.ts
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from '../packages/dto/create-user.dto';
@@ -18,7 +21,15 @@ export class AuthService {
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    // Hashear la contraseña
+    // Validación para evitar correos duplicados
+    const existingUser = await this.usersService.findByEmail(
+      createUserDto.email,
+    );
+    if (existingUser) {
+      throw new ConflictException('El correo ya existe');
+    }
+
+    // Se hashea la contraseña
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(
       createUserDto.password,

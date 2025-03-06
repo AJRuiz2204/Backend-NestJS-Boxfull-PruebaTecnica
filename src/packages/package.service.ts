@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateShipmentDto } from './dto/create-shipment.dto';
 import { UpdateShipmentDto } from './dto/update-shipment.dto';
@@ -8,7 +9,13 @@ export class PackagesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createShipment(dto: CreateShipmentDto): Promise<any> {
+    if (!dto.scheduledDate) {
+      throw new BadRequestException("El campo 'scheduledDate' es obligatorio");
+    }
     const scheduledDate = new Date(dto.scheduledDate);
+    if (isNaN(scheduledDate.getTime())) {
+      throw new BadRequestException("Fecha 'scheduledDate' no válida");
+    }
 
     return this.prisma.shipment.create({
       data: {
@@ -68,9 +75,7 @@ export class PackagesService {
 
   async deleteShipment(id: number): Promise<any> {
     return this.prisma.$transaction(async (tx) => {
-      // Eliminar los paquetes asociados al envío
       await tx.package.deleteMany({ where: { shipmentId: id } });
-      // Eliminar el envío
       return tx.shipment.delete({ where: { id } });
     });
   }

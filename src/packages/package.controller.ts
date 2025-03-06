@@ -7,16 +7,8 @@ import {
   Param,
   Post,
   Put,
-  Query,
-  BadRequestException,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { PackagesService } from './package.service';
 import { CreateShipmentDto } from './dto/create-shipment.dto';
 import { UpdateShipmentDto } from './dto/update-shipment.dto';
@@ -77,26 +69,10 @@ export class PackagesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Obtener envíos por municipio y departamento' })
-  @ApiQuery({
-    name: 'municipality',
-    required: false,
-    description: 'Municipio para filtrar envíos',
+  @ApiOperation({
+    summary: 'Obtener envíos y packages sin filtros',
   })
-  @ApiQuery({
-    name: 'department',
-    required: false,
-    description: 'Departamento para filtrar envíos',
-  })
-  async findByMunicipalityAndDepartment(
-    @Query('municipality') municipality?: string,
-    @Query('department') department?: string,
-  ) {
-    if (!municipality && !department) {
-      throw new BadRequestException(
-        'Debe enviar al menos un filtro: municipality o department',
-      );
-    }
-    return this.packagesService.getShipmentsByFilters(municipality, department);
+  async getShipments() {
+    return this.packagesService.getShipmentsByFilters();
   }
 }

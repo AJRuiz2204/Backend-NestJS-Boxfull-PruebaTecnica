@@ -1,5 +1,3 @@
-// src/packages/dto/create-shipment.dto.ts
-
 import {
   IsString,
   IsEmail,
